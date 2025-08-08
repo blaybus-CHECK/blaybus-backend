@@ -52,9 +52,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            if docker ps -aq -f name=blaybus-backend >/dev/null; then
-            docker stop blaybus-backend
-            docker rm blaybus-backend
-            fi
+            docker stop blaybus-backend || true
+            docker rm blaybus-backend || true
             docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
             docker run -d --name blaybus-backend -p 443:8080 $REGISTRY/$REPOSITORY:$IMAGE_TAG
