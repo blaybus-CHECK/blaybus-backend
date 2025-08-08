@@ -46,6 +46,10 @@ jobs:
 
       - name: EC2 SSH 접속
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: blaybus-backend
+          IMAGE_TAG: ${{ github.sha }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
@@ -55,4 +59,4 @@ jobs:
             docker stop blaybus-backend || true
             docker rm blaybus-backend || true
             docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
-            docker run -d --name blaybus-backend -p 443:8080 $REGISTRY/$REPOSITORY:$IMAGE_TAG
+            docker run -d --name blaybus-backend -p 8080:8080 $REGISTRY/$REPOSITORY:$IMAGE_TAG
