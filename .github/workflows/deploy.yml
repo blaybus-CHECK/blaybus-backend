@@ -35,28 +35,26 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Docker 이미지 빌드, 태그, 푸시
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: blaybus-backend
-          IMAGE_TAG: ${{ github.sha }}
-        run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+      - name: Docker 이미지 빌드
+        run: docker build -t blaybus-backend .
+
+      - name: Docker 이미지 태그
+        run: docker tag blaybus-backend ${{ steps.login-ecr.outputs.registry }}/blaybus-backend:latest
+
+      - name: Docker 이미지 푸시
+        run: docker push ${{ steps.login-ecr.outputs.registry }}/blaybus-backend:latest
 
       - name: EC2 SSH 접속
         uses: appleboy/ssh-action@v1.0.3
-        env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: blaybus-backend
-          IMAGE_TAG: ${{ github.sha }}
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           script: |
-            docker stop blaybus-backend || true
-            docker rm blaybus-backend || true
-            docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
-            docker run -d --name blaybus-backend -p 8080:8080 $REGISTRY/$REPOSITORY:$IMAGE_TAG
+            if [ "$(docker ps -aq -f name=blaybus-backend)" ]; then
+                docker stop blaybus-backend || true
+                docker rm blaybus-backend || true
+            fi
+            docker pull ${{ steps.login-ecr.outputs.registry }}/blaybus-backend:latest
+            docker run -d --name blaybus-backend -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/blaybus-backend:latest
