@@ -52,14 +52,19 @@ public class WebConfig {
 
 
     @Bean
-    DefaultSecurityFilterChain securityFilterChain(HttpSecurity http, JwtDecoder jwtDecoder) throws Exception {
+    DefaultSecurityFilterChain securityFilterChain(
+        HttpSecurity http,
+        JwtDecoder jwtDecoder
+    ) throws Exception {
         return http
             .csrf(AbstractHttpConfigurer::disable)
             .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // iframe 허용
             .oauth2ResourceServer(c -> c.jwt(jwt -> jwt.decoder(jwtDecoder)))
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers("/h2-console/**").permitAll()
-                .anyRequest().permitAll()
+                .requestMatchers("/api/member/signUp").permitAll()
+                .requestMatchers("/api/member/issueToken").permitAll()
+                .anyRequest().authenticated()
             )
             .build();
     }
