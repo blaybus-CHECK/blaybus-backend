@@ -19,13 +19,11 @@ public class MainWork {
     @Column(unique = true)
     private UUID id;
 
-    private String title; // 작품 제목
+    private UUID memberId; // 회원 ID
 
-    private String content; // 작품 내용
+    private String title; // 메인 작업 제목
 
-    @OneToMany(mappedBy = "mainWork",
-        fetch = FetchType.LAZY, // 지연 로딩
-        cascade = CascadeType.ALL, // 영속성 전이
-        orphanRemoval = true) // 관계 해제 시 DB에서도 삭제
-    private List<MainWorkImage> images; // 작품 이미지 목록
+    private String description; // 메인 작업 설명
+
+//    private String[] imageUris; // 이미지 URI 배열
 }

@@ -35,7 +35,7 @@ public record MemberIssueTokenController(
     private String composeToken(Member member) {
         return Jwts
             .builder()
-            .claim("scp", "seller")
+            .claim("scp", "member")
             .setSubject(member.getId().toString())
             .signWith(jwtKeyHolder.key())
             .compact();

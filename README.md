@@ -99,3 +99,72 @@ MemberMeView {
 -[x] 서로 다른 회원의 식별자는 서로 다르다
 -[x] 같은 회원의 식별자는 항상 같다
 -[x] 회원의 기본 정보가 올바르게 설정된다
+
+## ✅ 대표 작품 등록
+### 요청
+
+```
+메서드: POST
+경로: /api/main-work
+헤더: Authorization: Bearer {accessToken}
+요청 본문:
+RegisterMainWorkCommand {
+    title: string,
+    description: string
+}
+```
+### curl 명령 예시
+
+```bash
+curl -i -X POST 'http://localhost:8080/api/main-work' \
+-H 'Authorization: Bearer {accessToken}' \
+-H 'Content-Type: application/json' \
+-d '{
+"title": "My First Main Work",
+"description": "This is a description of my first main work."
+}'
+```
+
+### 응답
+
+```
+상태 코드: 201 Created
+응답 본문: 없음
+```
+
+### 테스트
+- [x] 올바르게 요청하면 201 Created 상태코드를 반환한다
+- [x] 제목이 지정되지 않을 경우 400 Bad Request 상태코드를 반환한다
+- [x] 제목이 빈 문자열인 경우 400 Bad Request 상태코드를 반환한다
+- [x] 설명이 지정되지 않을 경우 400 Bad Request 상태코드를 반환한다
+- [x] 설명이 빈 문자열인 경우 400 Bad Request 상태코드를 반환한다
+- [x] 설명이 1000자 이상인 경우 400 Bad Request 상태코드를 반환한다
+- [x] 이미지 url이 5개 이상인 경우 400 Bad Request 상태코드를 반환한다
+- [x] 올바르게 요청하면 등록된 대표 작품 정보에 접근하는 Location 헤더를 반환한다
+
+## ✅ 대표 작품 조회
+### 요청
+```
+메서드: GET
+경로: /api/main-work/{id}
+헤더: Authorization: Bearer {accessToken}
+```
+### curl 명령 예시
+```
+curl -i -X GET 'http://localhost:8080/api/main-work/{id}' \
+-H 'Authorization: Bearer {accessToken}'
+```
+### 응답
+```
+MainWorkView {
+    id: string(UUID),
+    title: string,
+    description: string
+}
+```
+### 테스트
+- [x] 올바르게 요청하면 200 OK 상태코드를 반환한다
+- [x] 존재하지 않는 대표 작품 식별자를 사용하면 404 Not Found 상태코드를 반환한다
+- [x] 다른 회원이 등록한 대표 작품 식별자를 사용하면 404 Not Found 상태코드를 반환한다
+- [x] 대표 작품 식별자를 올바르게 반환한다
+- [x] 대표 작품 정보를 올바르게 반환한다
