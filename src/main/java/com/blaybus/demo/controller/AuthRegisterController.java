@@ -14,7 +14,7 @@ import java.util.UUID;
 import static com.blaybus.demo.UserPropertyValidator.*;
 
 @RestController
-public record MemberSignUpController(
+public record AuthRegisterController(
     MemberRepository repository,
     PasswordEncoder passwordEncoder
 ) {
