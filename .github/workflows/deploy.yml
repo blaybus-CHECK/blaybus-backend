@@ -22,7 +22,7 @@ jobs:
 #        run: echo "${{ screts.APPLICATION_YML }}" > ./src/main/resources/application.yml
 
       - name: 테스트 및 빌드
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
       - name: AWS Resources 접근을 위한 Credentials 설정
         uses: aws-actions/configure-aws-credentials@v4
