@@ -18,7 +18,7 @@ public record MemberIssueTokenController(
     JwtKeyHolder jwtKeyHolder
 ){
 
-    @PostMapping("/api/member/issueToken")
+    @PostMapping("/api/auth/login")
     ResponseEntity<?> issueToken(@RequestBody IssueMemberToken query) {
         return repository
             .findByEmail(query.email())

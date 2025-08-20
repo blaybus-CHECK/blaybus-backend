@@ -64,8 +64,8 @@ public class WebConfig {
             .oauth2ResourceServer(c -> c.jwt(jwt -> jwt.decoder(jwtDecoder)))
             .authorizeHttpRequests(requests -> requests
                 .requestMatchers("/h2-console/**").permitAll()
-                .requestMatchers("/api/member/signUp").permitAll()
-                .requestMatchers("/api/member/issueToken").permitAll()
+                .requestMatchers("/api/auth/register").permitAll()
+                .requestMatchers("/api/auth/login").permitAll()
                 .anyRequest().authenticated()
             )
             .build();

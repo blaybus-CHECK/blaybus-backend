@@ -19,7 +19,7 @@ public record MemberSignUpController(
     PasswordEncoder passwordEncoder
 ) {
 
-    @PostMapping("/api/member/signUp")
+    @PostMapping("/api/auth/register")
     ResponseEntity<?> signUp(@RequestBody CreateMemberCommand command) {
         if (isCommandValid(command) == false) {
             return ResponseEntity.badRequest().build();
