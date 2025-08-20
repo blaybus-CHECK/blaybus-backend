@@ -24,3 +24,9 @@
 security:
   jwt:
     secret: e4eaaaf2-d142-11e1-b3e4-080027620cdd
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 6MB      # 개별 파일 최대 크기
+      max-request-size: 30MB  # 전체 요청 최대 크기
